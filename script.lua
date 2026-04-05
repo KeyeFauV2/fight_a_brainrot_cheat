@@ -73,21 +73,22 @@ local Button = Tab:CreateButton({
    game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
    end,
 })
+-- 
 
-local Section = Tab:CreateSection("Auto Win")
+local Section = Tab:CreateSection("Auto Win (bad, can't bypass stamina), WIP")
 local is_auto_win = false
 local Button = Tab:CreateButton({
-   Name = "Enable Auto Win",
+   Name = "Enable Auto Win (WIP)",
    Callback = function()
       -- The function that takes place when the button is pressed
       is_auto_win = true
       Rayfield:Notify({
          Title = "Info",
-         Content = "Auto Win Enabled",
+         Content = "Auto Win Enabled, WIP",
          Duration = 6.5,
          Image = "info",
       })
-      while is_auto_win do -- ERROR: Expected 'do' when parsing while loop, got <eof>
+      while is_auto_win do
          game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
          wait(0.1)
          game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
@@ -110,9 +111,44 @@ local Button = Tab:CreateButton({
    end,
 })
 
+local Section = Tab:CreateSection("Auto Pet")
+local is_auto_pet = false
+local Button = Tab:CreateButton({
+   Name = "Enable Auto Pet",
+   Callback = function()
+      -- The function that takes place when the button is pressed
+      is_auto_pet = true
+      Rayfield:Notify({
+         Title = "Info",
+         Content = "Auto Pet Enabled",
+         Duration = 6.5,
+         Image = "info",
+      })
+      while is_auto_pet do
+        local args = {
+	        1
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("Pet"):WaitForChild("GetPet"):InvokeServer(unpack(args))
+        wait(1)
+      end
+   end,
+})
 
-
+local Button = Tab:CreateButton({
+   Name = "Disable Auto Pet",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   Rayfield:Notify({
+      Title = "Info",
+      Content = "Auto Pet Disable",
+      Duration = 6.5,
+      Image = "info",
+   })
+   is_auto_pet = false
+   end,
+})
 
 -- START: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
 -- ABILITY: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
 -- END: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
+-- loadstring(game:HttpGet('https://raw.githubusercontent.com/KeyeFauV2/fight_a_brainrot_cheat/refs/heads/main/script.lua'))()
