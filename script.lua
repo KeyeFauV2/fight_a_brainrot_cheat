@@ -159,8 +159,8 @@ local Dropdown = Tab:CreateDropdown({
    Callback = function(Options)
    -- The function that takes place when the selected option is changed
    -- The variable (Options) is a table of strings for the current selected options
-   if Options == "Tornado (140)" then
-        wand_arg = "b_0"..#Options
+   if Options[1] then
+        wand_arg = "b_01"
    end
    print(wand_arg)
    end,
