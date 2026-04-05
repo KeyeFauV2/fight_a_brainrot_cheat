@@ -149,47 +149,47 @@
     })
 
     local Section = Tab:CreateSection("Buy Wand")
-    local wand_arg = ""
+local wand_arg = {""}
 
-    local wand_list = {
-    "Tornado (140)",
-    "Hammer Down ! (2.8K)",
-    "Water (150K)",
-    "Kamehameha (3.5M)",
-    "Poison (6M)",
-    "Shadow Disk (30M)",
-    "Saint Water Spell (120M)",
-    "Fire Circle (220M)",
-    "Gilgamesh (400M)",
-    "Water Knife (5B)",
-    "Kayle Ult (8B)",
-    "Dark Knife (15B)"
-    }
+local wand_list = {
+   "Tornado (140)",
+   "Hammer Down ! (2.8K)",
+   "Water (150K)",
+   "Kamehameha (3.5M)",
+   "Poison (6M)",
+   "Shadow Disk (30M)",
+   "Saint Water Spell (120M)",
+   "Fire Circle (220M)",
+   "Gilgamesh (400M)",
+   "Water Knife (5B)",
+   "Kayle Ult (8B)",
+   "Dark Knife (15B)"
+}
 
-    local Dropdown = Tab:CreateDropdown({
-    Name = "Buy Wand",
-    Options = wand_list,
-    CurrentOption = {"Choose Wand"},
-    MultipleOptions = false,
-    Flag = "Dropdown1",
-    Callback = function(Options)
-        local selected = Options
+local Dropdown = Tab:CreateDropdown({
+   Name = "Buy Wand",
+   Options = wand_list,
+   CurrentOption = {"Choose Wand"},
+   MultipleOptions = false,
+   Flag = "Dropdown1",
+   Callback = function(Options)
+      local selected = Options
 
-        -- Si Rayfield renvoie un tableau au lieu d'une string
-        if typeof(Options) == "table" then
-            selected = Options[1]
-        end
+      if typeof(Options) == "table" then
+         selected = Options[1]
+      end
 
-        local index = table.find(wand_list, selected)
+      local index = table.find(wand_list, selected)
 
-        if index then
-            wand_arg = string.format("b_%02d", index)
-            print(wand_arg)
-        else
-            warn("Wand not Found")
-        end
-    end,
-    })
+      if index then
+         wand_arg = {string.format("b_%02d", index)}
+         print(wand_arg[1])
+      else
+         wand_arg = {""}
+         warn("Wand non trouvée")
+      end
+   end,
+})
 
     local Button = Tab:CreateButton({
         Name = "Buy Selected Wand",
