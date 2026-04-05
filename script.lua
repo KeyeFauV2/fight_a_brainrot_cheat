@@ -150,22 +150,46 @@ local Button = Tab:CreateButton({
 
 local Section = Tab:CreateSection("Buy Wand")
 local wand_arg = ""
+
+local wand_list = {
+   "Tornado (140)",
+   "Hammer Down ! (2.8K)",
+   "Water (150K)",
+   "Kamehameha (3.5M)",
+   "Poison (6M)",
+   "Shadow Disk (30M)",
+   "Saint Water Spell (120M)",
+   "Fire Circle (220M)",
+   "Gilgamesh (400M)",
+   "Water Knife (5B)",
+   "Kayle Ult (8B)",
+   "Dark Knife (15B)"
+}
+
 local Dropdown = Tab:CreateDropdown({
    Name = "Buy Wand",
-   Options = {"Tornado (140)", "Hammer Down ! (2.8K)", "Water (150K)", "Kamehameha (3.5M)", "Poison (6M)", "Shadow Disk (30M)", "Saint Water Spell (120M)", "Fire Circle (220M)", "Gilgamesh (400M)", "Water Knife (5B)", "Kayle Ult (8B)", "Dark Knife (15B)"},
+   Options = wand_list,
    CurrentOption = {"Choose Wand"},
    MultipleOptions = false,
-   Flag = "Dropdown1", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "Dropdown1",
    Callback = function(Options)
-   -- The function that takes place when the selected option is changed
-   -- The variable (Options) is a table of strings for the current selected options
-   if Options[1] then
-        wand_arg = "b_01"
-   end
-   print(wand_arg)
+      local selected = Options
+
+      -- Si Rayfield renvoie un tableau au lieu d'une string
+      if typeof(Options) == "table" then
+         selected = Options[1]
+      end
+
+      local index = table.find(wand_list, selected)
+
+      if index then
+         wand_arg = string.format("b_%02d", index)
+         print(wand_arg)
+      else
+         warn("Wand not Found")
+      end
    end,
 })
-
 -- START: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
 -- ABILITY: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
 -- END: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
