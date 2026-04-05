@@ -88,7 +88,7 @@ local Button = Tab:CreateButton({
          Duration = 6.5,
          Image = "info",
       })
-      while is_auto_win do
+      while is_auto_win do -- ERROR: Expected 'do' when parsing while loop, got <eof>
          game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
          wait(0.1)
          game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
@@ -124,7 +124,7 @@ local Button = Tab:CreateButton({
          Duration = 6.5,
          Image = "info",
       })
-      while is_auto_pet do
+      while is_auto_pet do -- ERROR: Expected 'do' when parsing while loop, got <eof>
         local args = {
 	        1
         }
@@ -145,6 +145,24 @@ local Button = Tab:CreateButton({
       Image = "info",
    })
    is_auto_pet = false
+   end,
+})
+
+local Section = Tab:CreateSection("Buy Wand")
+local wand_arg = ""
+local Dropdown = Tab:CreateDropdown({
+   Name = "Buy Wand",
+   Options = {"Tornado (140)", "Hammer Down ! (2.8K)", "Water (150K)", "Kamehameha (3.5M)", "Poison (6M)", "Shadow Disk (30M)", "Saint Water Spell (120M)", "Fire Circle (220M)", "Gilgamesh (400M)", "Water Knife (5B)", "Kayle Ult (8B)", "Dark Knife (15B)"},
+   CurrentOption = {"Choose Wand"},
+   MultipleOptions = false,
+   Flag = "Dropdown1", -- A flag is the identifier for the configuration file; make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Options)
+   -- The function that takes place when the selected option is changed
+   -- The variable (Options) is a table of strings for the current selected options
+   if Options == "Tornado (140)" then
+        wand_arg = "b_0"..#Options
+   end
+   print(wand_arg)
    end,
 })
 
