@@ -37,6 +37,7 @@
     })
 
     local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
+    local Currency = Tab:CreateSection("Currency")
     local player = game.Players.LocalPlayer
     local saphireValue = player:WaitForChild("leaderstats"):WaitForChild("Saphire")
 
