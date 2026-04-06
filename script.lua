@@ -14,6 +14,7 @@ local EndFightRemote = ServerRemote:WaitForChild("EndFightRequestClientToServer"
 local GetPetRemote = ServerRemote:WaitForChild("Pet"):WaitForChild("GetPet")
 local BuyWandRemote = ServerRemote:WaitForChild("BuyNewBaguette")
 local TeleportRemote = game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("Client"):WaitForChild("Teleporter"):WaitForChild("RequestTeleport")
+local UnlockZoneRemote = ServerRemote:WaitForChild("UnlockZoneRequest")
 
 local Window = Rayfield:CreateWindow({
     Name = "Fight a Brainrot Cheat ",
