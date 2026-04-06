@@ -260,7 +260,7 @@ Tab:CreateButton({
     end,
 })
 
-TTab:CreateSection("Worlds")
+Tab:CreateSection("Worlds")
 
 local world_arg = {""}
 
