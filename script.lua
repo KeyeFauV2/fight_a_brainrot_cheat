@@ -15,10 +15,10 @@ local GetPetRemote = ServerRemote:WaitForChild("Pet"):WaitForChild("GetPet")
 local BuyWandRemote = ServerRemote:WaitForChild("BuyNewBaguette")
 
 local Window = Rayfield:CreateWindow({
-    Name = "Fight a Brainrot Cheat V0.1",
+    Name = "Fight a Brainrot Cheat ",
     Icon = 0,
     LoadingTitle = "Loading Fight a Brainrot Cheat...",
-    LoadingSubtitle = ";)",
+    LoadingSubtitle = "V1.6 RELEASE",
     ShowText = "Fight a Brainrot",
     Theme = "DarkBlue",
 
@@ -52,7 +52,12 @@ local Window = Rayfield:CreateWindow({
 })
 
 local Tab = Window:CreateTab("Main", 4483362458)
-
+local VersionLabel = Tab:CreateLabel(
+   "Version : V1.6 RELEASE",
+    "info",
+    Color3.fromRGB(255, 255, 255),
+    false
+)
 local function notify(title, content)
     Rayfield:Notify({
         Title = title,
