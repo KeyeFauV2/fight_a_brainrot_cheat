@@ -186,7 +186,7 @@ local Dropdown = Tab:CreateDropdown({
          print(wand_arg[1])
       else
          wand_arg = {""}
-         warn("Wand non trouvée")
+         warn("Wand not found")
       end
    end,
 })
