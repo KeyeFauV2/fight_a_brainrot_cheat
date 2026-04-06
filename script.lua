@@ -37,6 +37,12 @@
     })
 
     local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
+    local LocalPlayerName = game.Players.LocalPlayer.Name
+    local Saphire = game.Players.LocalPlayer.leaderstats.Saphire.Value
+    function update_saphire()
+        Saphire = game.Players.LocalPlayer.leaderstats.Saphire.Value
+    end
+    local Label = Tab:CreateLabel("Real Saphire Count : "..Saphire, "coins", Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme, the ui may broke when auto pet
     local Section = Tab:CreateSection("Auto Money")
     local is_auto_money = false
     local Button = Tab:CreateButton({
@@ -55,6 +61,7 @@
             wait(0.1)
             game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
             wait(0.1)
+            update_saphire()
             game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
     end
     end,
@@ -92,6 +99,8 @@
             game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
             wait(0.1)
             game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
+            wait(0.1)
+            update_saphire()
         end
     end,
     })
@@ -124,12 +133,13 @@
             Duration = 6.5,
             Image = "info",
         })
-        while is_auto_pet do -- ERROR: Expected 'do' when parsing while loop, got <eof>
+        while is_auto_pet do
             local args = {
                 1
             }
             game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("Pet"):WaitForChild("GetPet"):InvokeServer(unpack(args))
-            wait(1)
+            update_saphire()
+            wait(0.5)
         end
     end,
     })
@@ -148,7 +158,7 @@
     end,
     })
 
-    local Section = Tab:CreateSection("Buy Wand")
+local Section = Tab:CreateSection("Buy Wand")
 local wand_arg = {""}
 
 local wand_list = {
@@ -202,11 +212,10 @@ local Button = Tab:CreateButton({
         Image = "info",
     })
     game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("BuyNewBaguette"):InvokeServer(unpack(wand_arg))
+    update_saphire()
     end,
 })
-local LocalPlayerName = game.Players.LocalPlayer.Name
-local Saphire = game.Players.LocalPlayer.leaderstats.Saphire.Value
-local Label = Tab:CreateLabel("Real Saphire Count : "..Saphire, coins, Color3.fromRGB(255, 255, 0), false) -- Title, Icon, Color, IgnoreTheme
+
     -- START: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
     -- ABILITY: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
     -- END: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
