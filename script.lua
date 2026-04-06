@@ -13,6 +13,7 @@ local AbilityRemote = ServerRemote:WaitForChild("AbilityFireRequest")
 local EndFightRemote = ServerRemote:WaitForChild("EndFightRequestClientToServer")
 local GetPetRemote = ServerRemote:WaitForChild("Pet"):WaitForChild("GetPet")
 local BuyWandRemote = ServerRemote:WaitForChild("BuyNewBaguette")
+local TeleportRemote = game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("Client"):WaitForChild("Teleporter"):WaitForChild("RequestTeleport")
 
 local Window = Rayfield:CreateWindow({
     Name = "Fight a Brainrot Cheat ",
@@ -243,7 +244,7 @@ Tab:CreateDropdown({
     end,
 })
 
--- Valeur par défaut
+-- default
 wand_arg[1] = "b_01"
 
 Tab:CreateButton({
@@ -256,6 +257,57 @@ Tab:CreateButton({
 
         BuyWandRemote:InvokeServer(unpack(wand_arg))
         notify("Info", "Bought Wand: " .. tostring(wand_arg[1]))
+    end,
+})
+
+Tab:CreateSection("Worlds")
+
+local world_arg = {""}
+
+local world_list = { -- these names 🥀💔
+    "Tung Tung Tung Sahur", 
+    "BrrBrrPatapim (3 Wins)",
+    "Ballerina Capuccina ( 100 Wins )",
+    "Tralalelo tralala ( 1000 Wins )"
+}
+
+Tab:CreateDropdown({
+    Name = "Worlds",
+    Options = worlds_list,
+    CurrentOption = {"Tung Tung Tung Sahur"},
+    MultipleOptions = false,
+    Flag = "Dropdown2",
+    Callback = function(Options)
+        local selected = Options
+
+        if typeof(Options) == "table" then
+            selected = Options[1]
+        end
+
+        local index = table.find(world_list, selected)
+
+        if index then
+            world_arg[1] = string.format("Zone%i", index) -- It could be simpler
+            print("Selected World:", selected, "| Arg:", world_arg[1])
+        else
+            world_arg[1] = ""
+            warn("World not found")
+        end
+    end,
+})
+
+world_arg[1] = "b_01"
+
+Tab:CreateButton({
+    Name = "Teleport to Selected World",
+    Callback = function()
+        if world_arg[1] == "" then
+            notify("Error", "No wand selected")
+            return
+        end
+
+        TeleportRemote:InvokeServer(unpack(world_arg))
+        notify("Info", "Bought Wand: " .. tostring(world_arg[1]))
     end,
 })
 
