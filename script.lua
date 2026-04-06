@@ -1,227 +1,275 @@
-    local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-    local Window = Rayfield:CreateWindow({
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local LocalPlayer = Players.LocalPlayer
+local leaderstats = LocalPlayer:WaitForChild("leaderstats")
+local saphireValue = leaderstats:WaitForChild("Saphire")
+
+local ServerRemote = ReplicatedStorage:WaitForChild("RemoteFunction"):WaitForChild("Server")
+local StartFightRemote = ServerRemote:WaitForChild("StartFightRequestClientToServer")
+local AbilityRemote = ServerRemote:WaitForChild("AbilityFireRequest")
+local EndFightRemote = ServerRemote:WaitForChild("EndFightRequestClientToServer")
+local GetPetRemote = ServerRemote:WaitForChild("Pet"):WaitForChild("GetPet")
+local BuyWandRemote = ServerRemote:WaitForChild("BuyNewBaguette")
+
+local Window = Rayfield:CreateWindow({
     Name = "Fight a Brainrot Cheat V0.1",
-    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+    Icon = 0,
     LoadingTitle = "Loading Fight a Brainrot Cheat...",
     LoadingSubtitle = ";)",
-    ShowText = "Fight a Brainrot", -- for mobile users to unhide Rayfield, change if you'd like
-    Theme = "DarkBlue", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+    ShowText = "Fight a Brainrot",
+    Theme = "DarkBlue",
 
-    ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
+    ToggleUIKeybind = "K",
 
     DisableRayfieldPrompts = false,
-    DisableBuildWarnings = false, -- Prevents Rayfield from emitting warnings when the script has a version mismatch with the interface.
+    DisableBuildWarnings = false,
 
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = nil, -- Create a custom folder for your hub/game
+        FolderName = nil,
         FileName = "FAB"
     },
 
     Discord = {
-        Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-        Invite = "noinvitelink", -- The Discord invite code, do not include Discord.gg/. E.g. Discord.gg/ABCD would be ABCD
-        RememberJoins = true -- Set this to false to make them join the Discord every time they load it up
+        Enabled = false,
+        Invite = "noinvitelink",
+        RememberJoins = true
     },
 
-    KeySystem = false, -- Set this to true to use our key system
+    KeySystem = false,
     KeySettings = {
         Title = "Untitled",
         Subtitle = "Key System",
-        Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-        FileName = "Key", -- It is recommended to use something unique, as other scripts using Rayfield may overwrite your key file
-        SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-        GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-        Key = {"Hello"} -- List of keys that the system will accept, can be RAW file links (pastebin, github, etc.) or simple strings ("hello", "key22")
+        Note = "No method of obtaining the key is provided",
+        FileName = "Key",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = {"Hello"}
     }
+})
+
+local Tab = Window:CreateTab("Main", 4483362458)
+
+local function notify(title, content)
+    Rayfield:Notify({
+        Title = title,
+        Content = content,
+        Duration = 6.5,
+        Image = "info",
     })
+end
 
-    local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
-    local Currency = Tab:CreateSection("Currency")
-    local player = game.Players.LocalPlayer
-    local saphireValue = player:WaitForChild("leaderstats"):WaitForChild("Saphire")
+-- =========================
+-- Saphire Label Auto Update
+-- =========================
 
-    local Label = Tab:CreateLabel("Real Saphire Count : "..tostring(saphireValue.Value), "coins", Color3.fromRGB(255, 255, 255), false)
+local Label = Tab:CreateLabel(
+    "Real Saphire Count : " .. tostring(saphireValue.Value),
+    "coins",
+    Color3.fromRGB(255, 255, 255),
+    false
+)
 
-    local function update_saphire()
-        Label:Set("Real Saphire Count : "..tostring(saphireValue.Value))
-    end
-    
-    local Label = Tab:CreateLabel("Real Saphire Count : "..Saphire, "coins", Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme, the ui may broke when auto pet
-    local Section = Tab:CreateSection("Auto Money")
-    local is_auto_money = false
-    local Button = Tab:CreateButton({
+local function update_saphire()
+    Label:Set("Real Saphire Count : " .. tostring(saphireValue.Value))
+end
+
+update_saphire()
+
+saphireValue:GetPropertyChangedSignal("Value"):Connect(function()
+    update_saphire()
+end)
+
+-- =========================
+-- Auto Money
+-- =========================
+
+Tab:CreateSection("Auto Money")
+
+local is_auto_money = false
+
+Tab:CreateButton({
     Name = "Enable Auto Money",
     Callback = function()
-    -- The function that takes place when the button is pressed
-    is_auto_money = true
-    Rayfield:Notify({
-        Title = "Info",
-        Content = "Auto Money Enabled",
-        Duration = 6.5,
-        Image = "info",
-    })
-    while is_auto_money == true do 
-            game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
-            wait(0.1)
-            game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
-            wait(0.1)
-            update_saphire()
-            game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
-    end
+        if is_auto_money then
+            notify("Info", "Auto Money is already enabled")
+            return
+        end
+
+        is_auto_money = true
+        notify("Info", "Auto Money Enabled")
+
+        task.spawn(function()
+            while is_auto_money do
+                StartFightRemote:InvokeServer()
+                task.wait(0.1)
+
+                AbilityRemote:InvokeServer()
+                task.wait(0.1)
+
+                EndFightRemote:InvokeServer()
+                task.wait(0.15)
+            end
+        end)
     end,
-    })
-    local Button = Tab:CreateButton({
+})
+
+Tab:CreateButton({
     Name = "Disable Auto Money",
     Callback = function()
-    -- The function that takes place when the button is pressed
-    Rayfield:Notify({
-        Title = "Info",
-        Content = "Auto Money Disable",
-        Duration = 6.5,
-        Image = "info",
-    })
-    is_auto_money = false
-    game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
+        is_auto_money = false
+        EndFightRemote:InvokeServer()
+        notify("Info", "Auto Money Disabled")
     end,
-    })
-    -- 
+})
 
-    local Section = Tab:CreateSection("Auto Win (bad, can't bypass stamina), WIP")
-    local is_auto_win = false
-    local Button = Tab:CreateButton({
+-- =========================
+-- Auto Win
+-- =========================
+
+Tab:CreateSection("Auto Win (bad, can't bypass stamina), WIP")
+
+local is_auto_win = false
+
+Tab:CreateButton({
     Name = "Enable Auto Win (WIP)",
     Callback = function()
-        -- The function that takes place when the button is pressed
-        is_auto_win = true
-        Rayfield:Notify({
-            Title = "Info",
-            Content = "Auto Win Enabled, WIP",
-            Duration = 6.5,
-            Image = "info",
-        })
-        while is_auto_win do -- ERROR: Expected 'do' when parsing while loop, got <eof>
-            game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
-            wait(0.1)
-            game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
-            wait(0.1)
-            update_saphire()
+        if is_auto_win then
+            notify("Info", "Auto Win is already enabled")
+            return
         end
-    end,
-    })
 
-    local Button = Tab:CreateButton({
+        is_auto_win = true
+        notify("Info", "Auto Win Enabled, WIP")
+
+        task.spawn(function()
+            while is_auto_win do
+                StartFightRemote:InvokeServer()
+                task.wait(0.1)
+
+                AbilityRemote:InvokeServer()
+                task.wait(0.1)
+            end
+        end)
+    end,
+})
+
+Tab:CreateButton({
     Name = "Disable Auto Win",
     Callback = function()
-    -- The function that takes place when the button is pressed
-    Rayfield:Notify({
-        Title = "Info",
-        Content = "Auto Win Disable",
-        Duration = 6.5,
-        Image = "info",
-    })
-    is_auto_win = false
-    game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
+        is_auto_win = false
+        EndFightRemote:InvokeServer()
+        notify("Info", "Auto Win Disabled")
     end,
-    })
+})
 
-    local Section = Tab:CreateSection("Auto Pet")
-    local is_auto_pet = false
-    local Button = Tab:CreateButton({
+-- =========================
+-- Auto Pet
+-- =========================
+
+Tab:CreateSection("Auto Pet")
+
+local is_auto_pet = false
+
+Tab:CreateButton({
     Name = "Enable Auto Pet",
     Callback = function()
-        -- The function that takes place when the button is pressed
-        is_auto_pet = true
-        Rayfield:Notify({
-            Title = "Info",
-            Content = "Auto Pet Enabled",
-            Duration = 6.5,
-            Image = "info",
-        })
-        while is_auto_pet do
-            local args = {
-                1
-            }
-            game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("Pet"):WaitForChild("GetPet"):InvokeServer(unpack(args))
-            update_saphire()
-            wait(0.5)
+        if is_auto_pet then
+            notify("Info", "Auto Pet is already enabled")
+            return
         end
-    end,
-    })
 
-    local Button = Tab:CreateButton({
+        is_auto_pet = true
+        notify("Info", "Auto Pet Enabled")
+
+        task.spawn(function()
+            while is_auto_pet do
+                GetPetRemote:InvokeServer(1)
+                task.wait(0.5)
+            end
+        end)
+    end,
+})
+
+Tab:CreateButton({
     Name = "Disable Auto Pet",
     Callback = function()
-    -- The function that takes place when the button is pressed
-    Rayfield:Notify({
-        Title = "Info",
-        Content = "Auto Pet Disable",
-        Duration = 6.5,
-        Image = "info",
-    })
-    is_auto_pet = false
+        is_auto_pet = false
+        notify("Info", "Auto Pet Disabled")
     end,
-    })
+})
 
-local Section = Tab:CreateSection("Buy Wand")
+-- =========================
+-- Buy Wand
+-- =========================
+
+Tab:CreateSection("Buy Wand")
+
 local wand_arg = {""}
 
 local wand_list = {
-   "Tornado (140)",
-   "Hammer Down ! (2.8K)",
-   "Water (150K)",
-   "Kamehameha (3.5M)",
-   "Poison (6M)",
-   "Shadow Disk (30M)",
-   "Saint Water Spell (120M)",
-   "Fire Circle (220M)",
-   "Gilgamesh (400M)",
-   "Water Knife (5B)",
-   "Kayle Ult (8B)",
-   "Dark Knife (15B)"
+    "Tornado (140)",
+    "Hammer Down ! (2.8K)",
+    "Water (150K)",
+    "Kamehameha (3.5M)",
+    "Poison (6M)",
+    "Shadow Disk (30M)",
+    "Saint Water Spell (120M)",
+    "Fire Circle (220M)",
+    "Gilgamesh (400M)",
+    "Water Knife (5B)",
+    "Kayle Ult (8B)",
+    "Dark Knife (15B)"
 }
 
-local Dropdown = Tab:CreateDropdown({
-   Name = "Buy Wand",
-   Options = wand_list,
-   CurrentOption = {"Choose Wand"},
-   MultipleOptions = false,
-   Flag = "Dropdown1",
-   Callback = function(Options)
-      local selected = Options
+Tab:CreateDropdown({
+    Name = "Buy Wand",
+    Options = wand_list,
+    CurrentOption = {"Tornado (140)"},
+    MultipleOptions = false,
+    Flag = "Dropdown1",
+    Callback = function(Options)
+        local selected = Options
 
-      if typeof(Options) == "table" then
-         selected = Options[1]
-      end
+        if typeof(Options) == "table" then
+            selected = Options[1]
+        end
 
-      local index = table.find(wand_list, selected)
+        local index = table.find(wand_list, selected)
 
-      if index then
-         wand_arg = {string.format("b_%02d", index)}
-         print(wand_arg[1])
-      else
-         wand_arg = {""}
-         warn("Wand not found")
-      end
-   end,
-})
-
-local Button = Tab:CreateButton({
-    Name = "Buy Selected Wand",
-    Callback = function()
-    -- The function that takes place when the button is pressed
-    Rayfield:Notify({
-        Title = "Info",
-        Content = "Buyed Wand",
-        Duration = 6.5,
-        Image = "info",
-    })
-    game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("BuyNewBaguette"):InvokeServer(unpack(wand_arg))
-    update_saphire()
+        if index then
+            wand_arg[1] = string.format("b_%02d", index)
+            print("Selected wand:", selected, "| Arg:", wand_arg[1])
+        else
+            wand_arg[1] = ""
+            warn("Wand not found")
+        end
     end,
 })
 
-    -- START: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
-    -- ABILITY: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
-    -- END: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
-    -- loadstring(game:HttpGet('https://raw.githubusercontent.com/KeyeFauV2/fight_a_brainrot_cheat/refs/heads/main/script.lua'))()
+-- Valeur par défaut
+wand_arg[1] = "b_01"
+
+Tab:CreateButton({
+    Name = "Buy Selected Wand",
+    Callback = function()
+        if wand_arg[1] == "" then
+            notify("Error", "No wand selected")
+            return
+        end
+
+        BuyWandRemote:InvokeServer(unpack(wand_arg))
+        notify("Info", "Bought Wand: " .. tostring(wand_arg[1]))
+    end,
+})
+
+-- =========================
+-- Remotes reminder
+-- =========================
+
+-- START: StartFightRemote:InvokeServer()
+-- ABILITY: AbilityRemote:InvokeServer()
+-- END: EndFightRemote:InvokeServer()
