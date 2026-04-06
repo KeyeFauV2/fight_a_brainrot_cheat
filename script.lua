@@ -260,20 +260,20 @@ Tab:CreateButton({
     end,
 })
 
-Tab:CreateSection("Worlds")
+TTab:CreateSection("Worlds")
 
 local world_arg = {""}
 
-local world_list = { -- these names 🥀💔
-    "Tung Tung Tung Sahur", 
+local world_list = {
+    "Tung Tung Tung Sahur",
     "BrrBrrPatapim (3 Wins)",
-    "Ballerina Capuccina ( 100 Wins )",
-    "Tralalelo tralala ( 1000 Wins )"
+    "Ballerina Capuccina (100 Wins)",
+    "Tralalelo tralala (1000 Wins)"
 }
 
 Tab:CreateDropdown({
     Name = "Worlds",
-    Options = worlds_list,
+    Options = world_list,
     CurrentOption = {"Tung Tung Tung Sahur"},
     MultipleOptions = false,
     Flag = "Dropdown2",
@@ -287,7 +287,7 @@ Tab:CreateDropdown({
         local index = table.find(world_list, selected)
 
         if index then
-            world_arg[1] = string.format("Zone%i", index) -- It could be simpler
+            world_arg[1] = string.format("Zone%d", index)
             print("Selected World:", selected, "| Arg:", world_arg[1])
         else
             world_arg[1] = ""
@@ -296,21 +296,26 @@ Tab:CreateDropdown({
     end,
 })
 
-world_arg[1] = "b_01"
+world_arg[1] = "Zone1"
 
 Tab:CreateButton({
     Name = "Teleport to Selected World",
     Callback = function()
         if world_arg[1] == "" then
-            notify("Error", "No wand selected")
+            notify("Error", "No world selected")
             return
         end
 
-        TeleportRemote:InvokeServer(unpack(world_arg))
-        notify("Info", "Bought Wand: " .. tostring(world_arg[1]))
+        -- Débloque la zone
+        UnlockZoneRemote:InvokeServer(unpack(world_arg))
+        task.wait(0.2)
+
+        -- Téléporte
+        TeleportRemote:FireServer(unpack(world_arg))
+
+        notify("Info", "Teleported to: " .. tostring(world_arg[1]))
     end,
 })
-
 
 -- START: StartFightRemote:InvokeServer()
 -- ABILITY: AbilityRemote:InvokeServer()
