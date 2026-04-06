@@ -62,9 +62,7 @@ local function notify(title, content)
     })
 end
 
--- =========================
--- Saphire Label Auto Update
--- =========================
+
 
 local Label = Tab:CreateLabel(
     "Real Saphire Count : " .. tostring(saphireValue.Value),
@@ -83,9 +81,6 @@ saphireValue:GetPropertyChangedSignal("Value"):Connect(function()
     update_saphire()
 end)
 
--- =========================
--- Auto Money
--- =========================
 
 Tab:CreateSection("Auto Money")
 
@@ -126,9 +121,7 @@ Tab:CreateButton({
     end,
 })
 
--- =========================
--- Auto Win
--- =========================
+
 
 Tab:CreateSection("Auto Win (bad, can't bypass stamina), WIP")
 
@@ -166,9 +159,7 @@ Tab:CreateButton({
     end,
 })
 
--- =========================
--- Auto Pet
--- =========================
+
 
 Tab:CreateSection("Auto Pet")
 
@@ -202,9 +193,6 @@ Tab:CreateButton({
     end,
 })
 
--- =========================
--- Buy Wand
--- =========================
 
 Tab:CreateSection("Buy Wand")
 
@@ -266,10 +254,8 @@ Tab:CreateButton({
     end,
 })
 
--- =========================
--- Remotes reminder
--- =========================
 
 -- START: StartFightRemote:InvokeServer()
 -- ABILITY: AbilityRemote:InvokeServer()
 -- END: EndFightRemote:InvokeServer()
+-- loadstring(game:HttpGet('https://raw.githubusercontent.com/KeyeFauV2/fight_a_brainrot_cheat/refs/heads/main/script.lua'))()
