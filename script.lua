@@ -305,14 +305,9 @@ Tab:CreateButton({
             notify("Error", "No world selected")
             return
         end
-
-        -- Débloque la zone
         UnlockZoneRemote:InvokeServer(unpack(world_arg))
         task.wait(0.2)
-
-        -- Téléporte
         TeleportRemote:FireServer(unpack(world_arg))
-
         notify("Info", "Teleported to: " .. tostring(world_arg[1]))
     end,
 })
