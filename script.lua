@@ -191,22 +191,22 @@ local Dropdown = Tab:CreateDropdown({
    end,
 })
 
-    local Button = Tab:CreateButton({
-        Name = "Buy Selected Wand",
-        Callback = function()
-        -- The function that takes place when the button is pressed
-        Rayfield:Notify({
-            Title = "Info",
-            Content = "Buyed Wand",
-            Duration = 6.5,
-            Image = "info",
-        })
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("BuyNewBaguette"):InvokeServer(unpack(wand_arg))
-
-        
-        end,
+local Button = Tab:CreateButton({
+    Name = "Buy Selected Wand",
+    Callback = function()
+    -- The function that takes place when the button is pressed
+    Rayfield:Notify({
+        Title = "Info",
+        Content = "Buyed Wand",
+        Duration = 6.5,
+        Image = "info",
     })
-
+    game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("BuyNewBaguette"):InvokeServer(unpack(wand_arg))
+    end,
+})
+local LocalPlayerName = game.Players.LocalPlayer.Name
+local Saphire = game.Players.LocalPlayer.leaderstats.Saphire.Value
+local Label = Tab:CreateLabel("Real Saphire Count : "..Saphire, coins, Color3.fromRGB(255, 255, 0), false) -- Title, Icon, Color, IgnoreTheme
     -- START: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("StartFightRequestClientToServer"):InvokeServer()
     -- ABILITY: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("AbilityFireRequest"):InvokeServer()
     -- END: game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunction"):WaitForChild("Server"):WaitForChild("EndFightRequestClientToServer"):InvokeServer()
