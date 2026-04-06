@@ -37,11 +37,15 @@
     })
 
     local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
-    local LocalPlayerName = game.Players.LocalPlayer.Name
-    local Saphire = game.Players.LocalPlayer.leaderstats.Saphire.Value
-    function update_saphire()
-        Saphire = game.Players.LocalPlayer.leaderstats.Saphire.Value
+    local player = game.Players.LocalPlayer
+    local saphireValue = player:WaitForChild("leaderstats"):WaitForChild("Saphire")
+
+    local Label = Tab:CreateLabel("Real Saphire Count : "..tostring(saphireValue.Value), "coins", Color3.fromRGB(255, 255, 255), false)
+
+    local function update_saphire()
+        Label:Set("Real Saphire Count : "..tostring(saphireValue.Value))
     end
+    
     local Label = Tab:CreateLabel("Real Saphire Count : "..Saphire, "coins", Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme, the ui may broke when auto pet
     local Section = Tab:CreateSection("Auto Money")
     local is_auto_money = false
